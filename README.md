@@ -10,13 +10,17 @@ Before sending a purchase, AmbuShop verifies:
 
 - you are in Mhaura and within 6 yalms of Gorpa-Masorpa;
 - live Hallmark and Gallantry balances;
-- total currency cost for the requested purchase;
-- required **main Inventory** slots, including room in existing partial stacks;
-- every individual purchase is 99 items or fewer.
+- total currency cost for the complete plan;
+- required **main Inventory** slots across every item in the plan, including room in existing partial stacks;
+- every individual transaction is 99 items or fewer;
+- requested quantities do not exceed the published monthly cap for each catalog entry;
+- purchases already confirmed by AmbuShop during the current addon session are deducted from those caps.
 
-After every stack purchase, the addon waits until the expected item quantity is visible in main Inventory before opening Gorpa again. If a purchase is not confirmed, automation stops instead of continuing.
+After every stack purchase, the addon waits until the **specific expected item** is visible in main Inventory at the expected quantity before continuing. If Gorpa rejects a transaction, an index changes, a monthly cap was already consumed manually, or inventory does not update, automation stops instead of continuing.
 
 Manual Gorpa menu input while automation is active also cancels the run.
+
+> Monthly-cap history made outside AmbuShop is not exposed by the normal currency packet. AmbuShop therefore enforces the published cap plus purchases it has confirmed during the current addon load. The game server remains authoritative for purchases made manually or before an addon reload; a rejected transaction stops the plan immediately.
 
 ## Installation
 
@@ -28,50 +32,128 @@ Place the `AmbuShop` folder in your Windower addons directory:
 
 Commands may use either `ambs` or `ambushop`.
 
+## Gallantry profile
+
+Gallantry reward ordering changes by Ambuscade reward rotation, so AmbuShop does **not** guess packet indices.
+
+The active profile is:
+
+```text
+alexandrite-rotation
+verified: 2026-10-07
+```
+
+The current verified Gallantry packet catalog is:
+
+| Index | Item | Cost | Monthly cap |
+|---:|---|---:|---:|
+| 0 | Tukuku Whiteshell | 20 | 90 |
+| 1 | Ordelle Bronzepiece | 20 | 90 |
+| 2 | One Byne Bill | 20 | 90 |
+| 3 | Pluton | 50 | 125 |
+| 4 | Umbral Marrow | 30,000 | 1 |
+| 5 | Alexandrite | 15 | 450 |
+
+Alexandrite index 5 was proven by the live AmbuShop purchase on this rotation. The remaining prefix matches the retail Ambuloot Alexandrite-rotation map.
+
+**Beitetsu, Riftborn Boulder, Heavy Metal, Riftdross and Riftcinder are intentionally not assigned speculative Gallantry indices in this profile.** They remain available through the stable Hallmark catalog.
+
+Inspect the active catalog in game with:
+
+```text
+//ambs catalog gallantry
+//ambs catalog hallmarks
+```
+
+After an Ambuscade version update changes the Gallantry rotation, update/verify the profile before using Gallantry automation again.
+
 ## Alexandrite
 
-For the current Alexandrite buyout:
+For the full Alexandrite buyout:
 
 - Hallmarks: **1,750 Alexandrite × 15 = 26,250 Hallmarks**
 - Gallantry: **450 Alexandrite × 15 = 6,750 Gallantry**
 - Total: **2,200 Alexandrite**
-- Ambuscade transactions: **23** because each purchase is capped at 99
+- Transactions: **23** because every purchase is capped at 99
 
-Stand near Gorpa-Masorpa and run:
+Preview:
 
 ```text
 //ambs dryrun alex
 ```
 
-This performs all point/space checks but buys nothing.
-
-Then:
+Execute:
 
 ```text
 //ambs alex
 ```
 
-This purchases the full 1,750 Hallmark allotment followed by the 450 Gallantry allotment.
+The full command assumes the monthly Alexandrite allotment has not already been consumed.
 
-**Important:** `//ambs alex` assumes you have not already purchased part of this month's Alexandrite stock. If you already bought some, request the exact remaining quantity with the explicit commands below instead.
+## Stockup plan
+
+The built-in stockup plan is currently **Yagrush-focused** and adapts to the character's live point balances.
+
+Preview it first:
+
+```text
+//ambs plan stockup
+```
+
+or:
+
+```text
+//ambs dryrun stockup
+```
+
+Execute:
+
+```text
+//ambs stockup
+```
+
+Current priority:
+
+1. Spend Hallmarks on **Beitetsu**, up to the 500/month Hallmark cap.
+2. Spend Gallantry on **Pluton**, up to the 125/month Gallantry cap.
+3. If at least 30,000 Gallantry remains, buy the verified **Umbral Marrow**.
+4. Spend remaining usable Gallantry on the verified single Dynamis currencies:
+   - Tukuku Whiteshell
+   - Ordelle Bronzepiece
+   - One Byne Bill
+
+The plan only uses entries whose packet indices are verified in the active Gallantry rotation. It will not silently substitute an unverified Beitetsu/Boulder/HMP/Dross/Cinder Gallantry index.
+
+For the current post-Alex balances, this means the four characters with 18,800 Hallmarks buy 376 Beitetsu each, while Nyoourke and Terrasjr with 800 Hallmarks buy 16 each. Gallantry is then spent on verified current-rotation entries.
 
 ## Explicit purchases
 
-```text
-//ambs buy hallmarks alexandrite 1750
-//ambs buy gallantry alexandrite 450
+Examples:
 
-//ambs dryrun hallmarks alexandrite 1750
-//ambs dryrun gallantry alexandrite 450
+```text
+//ambs buy hallmarks beitetsu 376
+//ambs buy hallmarks pluton 125
+//ambs buy gallantry pluton 125
+//ambs buy gallantry tukuku whiteshell 90
 ```
 
-Hallmark consumables currently seeded in the catalog include Alexandrite, Dynamis currency, Heavy Metal, Riftdross/Riftcinder, Pluton, Beitetsu, Riftborn Boulder, High-Purity Bayld, Umbral Marrow, and Mulcibar's Scoria.
-
-The Gallantry reward page can change after version updates, so only the verified Alexandrite entry is currently seeded there.
-
-## Runtime commands
+Dry-run any explicit purchase:
 
 ```text
+//ambs dryrun hallmarks beitetsu 376
+//ambs dryrun gallantry pluton 125
+```
+
+## Commands
+
+```text
+//ambs alex
+//ambs stockup
+//ambs plan stockup
+//ambs dryrun stockup
+//ambs buy <hallmarks|gallantry> <item> <quantity>
+//ambs dryrun <hallmarks|gallantry> <item> <quantity>
+//ambs catalog <hallmarks|gallantry>
 //ambs status
 //ambs stop
 ```
@@ -80,7 +162,7 @@ The Gallantry reward page can change after version updates, so only the verified
 
 Gorpa-Masorpa uses Mhaura menu **386**.
 
-Ambuscade purchase payloads encode the requested stack as:
+Purchase payloads encode one stack/chunk as:
 
 ```text
 quantity * 256 + catalog_index
