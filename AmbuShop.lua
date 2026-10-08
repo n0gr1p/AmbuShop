@@ -1,6 +1,6 @@
 _addon.name = 'AmbuShop'
 _addon.author = 'n0gr1p + OpenAI'
-_addon.version = '0.2.0'
+_addon.version = '0.2.1'
 _addon.commands = {'ambs','ambushop'}
 
 local packets = require('packets')
@@ -32,48 +32,48 @@ local GALLANTRY_PROFILE = {
 
 local CATALOG = {
     hallmarks = {
-        ['tukuku whiteshell'] = {name='Tukuku Whiteshell', cost=20, index=0, limit=150},
-        ['lungo-nango jadeshell'] = {name='Lungo-Nango Jadeshell', cost=2000, index=1, limit=2},
-        ['ordelle bronzepiece'] = {name='Ordelle Bronzepiece', cost=20, index=2, limit=150},
-        ['montiont silverpiece'] = {name='Montiont Silverpiece', cost=2000, index=3, limit=2},
-        ['one byne bill'] = {name='One Byne Bill', cost=20, index=4, limit=150},
-        ['one hundred byne bill'] = {name='One Hundred Byne Bill', cost=2000, index=5, limit=2},
-        ['alexandrite'] = {name='Alexandrite', resource_name='Piece of Alexandrite', cost=15, index=6, limit=1750},
-        ['piece of alexandrite'] = {name='Alexandrite', resource_name='Piece of Alexandrite', cost=15, index=6, limit=1750},
-        ['heavy metal'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=7, limit=100},
-        ['heavy metal plate'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=7, limit=100},
-        ['plate of heavy metal'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=7, limit=100},
-        ['riftdross'] = {name='Riftdross', resource_name='Clump of Riftdross', cost=1500, index=8, limit=3},
-        ['riftcinder'] = {name='Riftcinder', resource_name='Pinch of Riftcinder', cost=1500, index=9, limit=3},
-        ['pluton'] = {name='Pluton', cost=50, index=10, limit=500},
-        ['beitetsu'] = {name='Beitetsu', cost=50, index=11, limit=500},
-        ['riftborn boulder'] = {name='Riftborn Boulder', cost=50, index=12, limit=500},
-        ['h-p bayld'] = {name='High-Purity Bayld', resource_name='Pinch of High-Purity Bayld', cost=35, index=13, limit=750},
-        ['high-purity bayld'] = {name='High-Purity Bayld', resource_name='Pinch of High-Purity Bayld', cost=35, index=13, limit=750},
-        ['umbral marrow'] = {name='Umbral Marrow', resource_name='Vial of Umbral Marrow', cost=30000, index=14, limit=2},
-        ['mulcibar scoria'] = {name="Mulcibar's Scoria", resource_name="Chunk of Mulcibar's Scoria", cost=50000, index=15, limit=1},
-        ["mulcibar's scoria"] = {name="Mulcibar's Scoria", resource_name="Chunk of Mulcibar's Scoria", cost=50000, index=15, limit=1},
+        ['tukuku whiteshell'] = {name='Tukuku Whiteshell', item_id=1449, cost=20, index=0, limit=150},
+        ['lungo-nango jadeshell'] = {name='Lungo-Nango Jadeshell', item_id=1450, cost=2000, index=1, limit=2},
+        ['ordelle bronzepiece'] = {name='Ordelle Bronzepiece', item_id=1452, cost=20, index=2, limit=150},
+        ['montiont silverpiece'] = {name='Montiont Silverpiece', item_id=1453, cost=2000, index=3, limit=2},
+        ['one byne bill'] = {name='One Byne Bill', item_id=1455, cost=20, index=4, limit=150},
+        ['one hundred byne bill'] = {name='One Hundred Byne Bill', item_id=1456, cost=2000, index=5, limit=2},
+        ['alexandrite'] = {name='Alexandrite', item_id=2488, cost=15, index=6, limit=1750},
+        ['piece of alexandrite'] = {name='Alexandrite', item_id=2488, cost=15, index=6, limit=1750},
+        ['heavy metal'] = {name='Heavy Metal Plate', item_id=3509, cost=200, index=7, limit=100},
+        ['heavy metal plate'] = {name='Heavy Metal Plate', item_id=3509, cost=200, index=7, limit=100},
+        ['plate of heavy metal'] = {name='Heavy Metal Plate', item_id=3509, cost=200, index=7, limit=100},
+        ['riftdross'] = {name='Riftdross', item_id=3498, cost=1500, index=8, limit=3},
+        ['riftcinder'] = {name='Riftcinder', item_id=3499, cost=1500, index=9, limit=3},
+        ['pluton'] = {name='Pluton', item_id=4059, cost=50, index=10, limit=500},
+        ['beitetsu'] = {name='Beitetsu', item_id=4060, cost=50, index=11, limit=500},
+        ['riftborn boulder'] = {name='Riftborn Boulder', item_id=4061, cost=50, index=12, limit=500},
+        ['h-p bayld'] = {name='High-Purity Bayld', item_id=8798, cost=35, index=13, limit=750},
+        ['high-purity bayld'] = {name='High-Purity Bayld', item_id=8798, cost=35, index=13, limit=750},
+        ['umbral marrow'] = {name='Umbral Marrow', item_id=3502, cost=30000, index=14, limit=2},
+        ['mulcibar scoria'] = {name="Mulcibar's Scoria", item_id=3503, cost=50000, index=15, limit=1},
+        ["mulcibar's scoria"] = {name="Mulcibar's Scoria", item_id=3503, cost=50000, index=15, limit=1},
     },
     gallantry = {
         -- Current verified Alexandrite rotation.
-        ['tukuku whiteshell'] = {name='Tukuku Whiteshell', cost=20, index=0, limit=90},
-        ['ordelle bronzepiece'] = {name='Ordelle Bronzepiece', cost=20, index=1, limit=90},
-        ['one byne bill'] = {name='One Byne Bill', cost=20, index=2, limit=90},
-        ['pluton'] = {name='Pluton', cost=50, index=3, limit=125},
-        ['umbral marrow'] = {name='Umbral Marrow', resource_name='Vial of Umbral Marrow', cost=30000, index=4, limit=1},
-        ['alexandrite'] = {name='Alexandrite', resource_name='Piece of Alexandrite', cost=15, index=5, limit=450},
-        ['piece of alexandrite'] = {name='Alexandrite', resource_name='Piece of Alexandrite', cost=15, index=5, limit=450},
-        ['beitetsu'] = {name='Beitetsu', cost=50, index=6, limit=125},
-        ['h-p bayld'] = {name='High-Purity Bayld', resource_name='Pinch of High-Purity Bayld', cost=35, index=7, limit=190},
-        ['high-purity bayld'] = {name='High-Purity Bayld', resource_name='Pinch of High-Purity Bayld', cost=35, index=7, limit=190},
-        ['mulcibar scoria'] = {name="Mulcibar's Scoria", resource_name="Chunk of Mulcibar's Scoria", cost=50000, index=8, limit=1},
-        ["mulcibar's scoria"] = {name="Mulcibar's Scoria", resource_name="Chunk of Mulcibar's Scoria", cost=50000, index=8, limit=1},
-        ['heavy metal'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=9, limit=25},
-        ['heavy metal plate'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=9, limit=25},
-        ['plate of heavy metal'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=9, limit=25},
-        ['riftdross'] = {name='Riftdross', resource_name='Clump of Riftdross', cost=1500, index=10, limit=1},
-        ['riftcinder'] = {name='Riftcinder', resource_name='Pinch of Riftcinder', cost=1500, index=11, limit=1},
-        ['riftborn boulder'] = {name='Riftborn Boulder', cost=50, index=12, limit=125},
+        ['tukuku whiteshell'] = {name='Tukuku Whiteshell', item_id=1449, cost=20, index=0, limit=90},
+        ['ordelle bronzepiece'] = {name='Ordelle Bronzepiece', item_id=1452, cost=20, index=1, limit=90},
+        ['one byne bill'] = {name='One Byne Bill', item_id=1455, cost=20, index=2, limit=90},
+        ['pluton'] = {name='Pluton', item_id=4059, cost=50, index=3, limit=125},
+        ['umbral marrow'] = {name='Umbral Marrow', item_id=3502, cost=30000, index=4, limit=1},
+        ['alexandrite'] = {name='Alexandrite', item_id=2488, cost=15, index=5, limit=450},
+        ['piece of alexandrite'] = {name='Alexandrite', item_id=2488, cost=15, index=5, limit=450},
+        ['beitetsu'] = {name='Beitetsu', item_id=4060, cost=50, index=6, limit=125},
+        ['h-p bayld'] = {name='High-Purity Bayld', item_id=8798, cost=35, index=7, limit=190},
+        ['high-purity bayld'] = {name='High-Purity Bayld', item_id=8798, cost=35, index=7, limit=190},
+        ['mulcibar scoria'] = {name="Mulcibar's Scoria", item_id=3503, cost=50000, index=8, limit=1},
+        ["mulcibar's scoria"] = {name="Mulcibar's Scoria", item_id=3503, cost=50000, index=8, limit=1},
+        ['heavy metal'] = {name='Heavy Metal Plate', item_id=3509, cost=200, index=9, limit=25},
+        ['heavy metal plate'] = {name='Heavy Metal Plate', item_id=3509, cost=200, index=9, limit=25},
+        ['plate of heavy metal'] = {name='Heavy Metal Plate', item_id=3509, cost=200, index=9, limit=25},
+        ['riftdross'] = {name='Riftdross', item_id=3498, cost=1500, index=10, limit=1},
+        ['riftcinder'] = {name='Riftcinder', item_id=3499, cost=1500, index=11, limit=1},
+        ['riftborn boulder'] = {name='Riftborn Boulder', item_id=4061, cost=50, index=12, limit=125},
     },
 }
 
@@ -164,9 +164,15 @@ end
 
 local function resolve_item_id(name)
     local needle = tostring(name):lower()
+    local fields = {'en', 'enl', 'name', 'log_name'}
     for id, item in pairs(res.items) do
-        if item and item.en and tostring(item.en):lower() == needle then
-            return tonumber(id)
+        if item then
+            for _, field in ipairs(fields) do
+                local candidate = item[field]
+                if candidate and tostring(candidate):lower() == needle then
+                    return tonumber(id)
+                end
+            end
         end
     end
 end
@@ -277,12 +283,17 @@ local function build_plan(requests)
             return nil, 'quantity must be a positive integer'
         end
 
-        local resource_name = item.resource_name or item.name
-        local item_id = resolve_item_id(resource_name)
-        if not item_id and item.name == 'Alexandrite' then
-            item_id = resolve_item_id('Alexandrite')
+        -- Catalog entries carry the retail item ID so inventory accounting does
+        -- not depend on Windower's short name vs. log name conventions
+        -- (for example: Riftdross vs. "clump of riftdross").
+        local item_id = tonumber(item.item_id)
+        if not item_id then
+            item_id = resolve_item_id(item.resource_name or item.name)
         end
-        if not item_id then return nil, 'could not resolve item ID for '..resource_name end
+        if not item_id or not res.items[item_id] then
+            return nil, string.format(
+                'could not resolve/validate item ID for %s', item.name)
+        end
 
         plan[#plan+1] = {
             page=page,
@@ -649,8 +660,8 @@ local function show_catalog(page)
 
     for _, item in ipairs(canonical_catalog_entries(page)) do
         chat(string.format(
-            '  index=%d cost=%d cap=%d  %s',
-            item.index, item.cost, item.limit, item.name))
+            '  index=%d item_id=%d cost=%d cap=%d  %s',
+            item.index, item.item_id or 0, item.cost, item.limit, item.name))
     end
 end
 
