@@ -39,8 +39,8 @@ Gallantry reward ordering changes by Ambuscade reward rotation, so AmbuShop does
 The active profile is:
 
 ```text
-alexandrite-rotation
-verified: 2026-10-07
+retail-2026-09-10
+verified against current retail client data: 2026-10-07
 ```
 
 The current verified Gallantry packet catalog is:
@@ -53,10 +53,15 @@ The current verified Gallantry packet catalog is:
 | 3 | Pluton | 50 | 125 |
 | 4 | Umbral Marrow | 30,000 | 1 |
 | 5 | Alexandrite | 15 | 450 |
+| 6 | Beitetsu | 50 | 125 |
+| 7 | High-Purity Bayld | 35 | 190 |
+| 8 | Mulcibar's Scoria | 50,000 | 1 |
+| 9 | Heavy Metal Plate | 200 | 25 |
+| 10 | Riftdross | 1,500 | 1 |
+| 11 | Riftcinder | 1,500 | 1 |
+| 12 | Riftborn Boulder | 50 | 125 |
 
-Alexandrite index 5 was proven by the live AmbuShop purchase on this rotation. The remaining prefix matches the retail Ambuloot Alexandrite-rotation map.
-
-**Beitetsu, Riftborn Boulder, Heavy Metal, Riftdross and Riftcinder are intentionally not assigned speculative Gallantry indices in this profile.** They remain available through the stable Hallmark catalog.
+The mapping was decoded directly from the current retail **Mhaura event 386** data from the September 10, 2026 client update. The table contains the item IDs, monthly caps, and point costs in matching index order. Alexandrite index 5 was also independently proven by the live AmbuShop purchase on October 7. The next announced version update is mid-October, so this is the current retail menu layout until that update changes it.
 
 Inspect the active catalog in game with:
 
@@ -115,16 +120,21 @@ Execute:
 Current priority:
 
 1. Spend Hallmarks on **Beitetsu**, up to the 500/month Hallmark cap.
-2. Spend Gallantry on **Pluton**, up to the 125/month Gallantry cap.
-3. If at least 30,000 Gallantry remains, buy the verified **Umbral Marrow**.
-4. Spend remaining usable Gallantry on the verified single Dynamis currencies:
-   - Tukuku Whiteshell
-   - Ordelle Bronzepiece
-   - One Byne Bill
+2. From Gallantry, buy the full **125 Beitetsu** cap.
+3. Buy **1 Riftdross + 1 Riftcinder**.
+4. If at least 12,500 Gallantry remains, buy the full **125 Pluton + 125 Riftborn Boulder** caps, then Heavy Metal Plates with the remainder.
+5. If less than 12,500 remains, use Heavy Metal Plates first so small balances are consumed efficiently, then Pluton/Boulders.
+6. For unusual leftover balances, clean up with H-P Bayld and then single Dynamis currencies.
 
-The plan only uses entries whose packet indices are verified in the active Gallantry rotation. It will not silently substitute an unverified Beitetsu/Boulder/HMP/Dross/Cinder Gallantry index.
+For the current post-Alex balances this produces the intended exact allocation:
 
-For the current post-Alex balances, this means the four characters with 18,800 Hallmarks buy 376 Beitetsu each, while Nyoourke and Terrasjr with 800 Hallmarks buy 16 each. Gallantry is then spent on verified current-rotation entries.
+| Character group | Hallmark Beitetsu | Gallantry Beitetsu | Pluton | Boulder | Dross | Cinder | HMP |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Etamame / Niightsiide / Ponpon / Redrogue | 376 each | 125 | 125 | 125 | 1 | 1 | 25 |
+| Nyoourke | 16 | 125 | 125 | 125 | 1 | 1 | 0 |
+| Terrasjr | 16 | 125 | 0 | 0 | 1 | 1 | 5 |
+
+Across all six characters that is **2,286 Beitetsu, 625 Plutons, 625 Riftborn Boulders, 6 Riftdross, 6 Riftcinder, and 105 Heavy Metal Plates**, consuming the current **76,800 Hallmarks + 139,000 Gallantry exactly**.
 
 ## Explicit purchases
 
