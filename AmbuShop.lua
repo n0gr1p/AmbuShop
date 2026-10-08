@@ -164,15 +164,11 @@ end
 
 local function resolve_item_id(name)
     local needle = tostring(name):lower()
+    local fields = {'en', 'enl', 'name', 'log_name'}
     for id, item in pairs(res.items) do
         if item then
-            local candidates = {
-                item.en,
-                item.enl,
-                item.name,
-                item.log_name,
-            }
-            for _, candidate in ipairs(candidates) do
+            for _, field in ipairs(fields) do
+                local candidate = item[field]
                 if candidate and tostring(candidate):lower() == needle then
                     return tonumber(id)
                 end
