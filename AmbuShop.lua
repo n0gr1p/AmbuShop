@@ -25,8 +25,9 @@ local NEXT_DELAY = 0.35
 --   * indices 0-5 match the retail Ambuloot Alexandrite-rotation map.
 -- Never add speculative Gallantry indices to a stockup plan.
 local GALLANTRY_PROFILE = {
-    name = 'alexandrite-rotation',
+    name = 'retail-2026-09-10',
     verified = '2026-10-07',
+    source = 'current retail event 386 DAT + live Alexandrite purchase',
 }
 
 local CATALOG = {
@@ -62,6 +63,17 @@ local CATALOG = {
         ['umbral marrow'] = {name='Umbral Marrow', resource_name='Vial of Umbral Marrow', cost=30000, index=4, limit=1},
         ['alexandrite'] = {name='Alexandrite', resource_name='Piece of Alexandrite', cost=15, index=5, limit=450},
         ['piece of alexandrite'] = {name='Alexandrite', resource_name='Piece of Alexandrite', cost=15, index=5, limit=450},
+        ['beitetsu'] = {name='Beitetsu', cost=50, index=6, limit=125},
+        ['h-p bayld'] = {name='High-Purity Bayld', resource_name='Pinch of High-Purity Bayld', cost=35, index=7, limit=190},
+        ['high-purity bayld'] = {name='High-Purity Bayld', resource_name='Pinch of High-Purity Bayld', cost=35, index=7, limit=190},
+        ['mulcibar scoria'] = {name="Mulcibar's Scoria", resource_name="Chunk of Mulcibar's Scoria", cost=50000, index=8, limit=1},
+        ["mulcibar's scoria"] = {name="Mulcibar's Scoria", resource_name="Chunk of Mulcibar's Scoria", cost=50000, index=8, limit=1},
+        ['heavy metal'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=9, limit=25},
+        ['heavy metal plate'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=9, limit=25},
+        ['plate of heavy metal'] = {name='Heavy Metal Plate', resource_name='Plate of Heavy Metal', cost=200, index=9, limit=25},
+        ['riftdross'] = {name='Riftdross', resource_name='Clump of Riftdross', cost=1500, index=10, limit=1},
+        ['riftcinder'] = {name='Riftcinder', resource_name='Pinch of Riftcinder', cost=1500, index=11, limit=1},
+        ['riftborn boulder'] = {name='Riftborn Boulder', cost=50, index=12, limit=125},
     },
 }
 
@@ -496,26 +508,52 @@ local function add_affordable_request(requests, page, key, balance)
     return balance - qty * item.cost, qty
 end
 
+local function add_exact_request(requests, page, key, quantity, balance)
+    local item = CATALOG[page] and CATALOG[page][key]
+    if not item or quantity <= 0 then return balance, 0 end
+
+    local remaining_cap = math.max(0, item.limit - session_bought(page, item.index))
+    local qty = math.min(quantity, remaining_cap, math.floor(balance / item.cost))
+    if qty <= 0 then return balance, 0 end
+
+    requests[#requests+1] = {page=page, item=key, quantity=qty}
+    return balance - qty * item.cost, qty
+end
+
 local function stockup_requests(hallmarks, gallantry)
     local requests = {}
     local hm = tonumber(hallmarks) or 0
     local gall = tonumber(gallantry) or 0
 
-    -- Yagrush priority: turn every usable Hallmark into Beitetsu, capped at
-    -- the published 500/month Hallmark limit.
-    hm = select(1, add_affordable_request(requests, 'hallmarks', 'beitetsu', hm))
+    -- Yagrush priority: use every available Hallmark on Beitetsu, up to the
+    -- 500/month Hallmark cap.
+    hm = add_affordable_request(requests, 'hallmarks', 'beitetsu', hm)
 
-    -- Current verified Gallantry rotation does NOT expose Beitetsu/Boulder/HMP
-    -- through any index we have proven.  Spend only on verified entries:
-    -- Pluton first, then useful Relic currency singles.  Umbral Marrow is
-    -- considered only if enough Gallantry remains after Pluton.
-    gall = select(1, add_affordable_request(requests, 'gallantry', 'pluton', gall))
-    if gall >= CATALOG.gallantry['umbral marrow'].cost then
-        gall = select(1, add_affordable_request(requests, 'gallantry', 'umbral marrow', gall))
+    -- Current retail Gallantry material page is decoded from event 386.
+    -- First lock in the highest-value limited materials we want every month.
+    gall = add_exact_request(requests, 'gallantry', 'beitetsu', 125, gall)
+    gall = add_exact_request(requests, 'gallantry', 'riftdross', 1, gall)
+    gall = add_exact_request(requests, 'gallantry', 'riftcinder', 1, gall)
+
+    -- With >=12,500 remaining, take full Pluton + Boulder caps first; this
+    -- matches the balanced REMA stockpile plan.  With less than that (TJ's
+    -- current case), prioritize HMP so the remaining points can be consumed
+    -- cleanly rather than creating tiny partial Pluton/Boulder allocations.
+    if gall >= 12500 then
+        gall = add_exact_request(requests, 'gallantry', 'pluton', 125, gall)
+        gall = add_exact_request(requests, 'gallantry', 'riftborn boulder', 125, gall)
+        gall = add_affordable_request(requests, 'gallantry', 'heavy metal plate', gall)
+    else
+        gall = add_affordable_request(requests, 'gallantry', 'heavy metal plate', gall)
+        gall = add_affordable_request(requests, 'gallantry', 'pluton', gall)
+        gall = add_affordable_request(requests, 'gallantry', 'riftborn boulder', gall)
     end
-    gall = select(1, add_affordable_request(requests, 'gallantry', 'tukuku whiteshell', gall))
-    gall = select(1, add_affordable_request(requests, 'gallantry', 'ordelle bronzepiece', gall))
-    gall = select(1, add_affordable_request(requests, 'gallantry', 'one byne bill', gall))
+
+    -- Generic cleanup for odd point balances after the priority package.
+    gall = add_affordable_request(requests, 'gallantry', 'h-p bayld', gall)
+    gall = add_affordable_request(requests, 'gallantry', 'tukuku whiteshell', gall)
+    gall = add_affordable_request(requests, 'gallantry', 'ordelle bronzepiece', gall)
+    gall = add_affordable_request(requests, 'gallantry', 'one byne bill', gall)
 
     return requests
 end
